@@ -5,7 +5,7 @@ import java.io.*;
 
 class Marble {
 
-    //private ArrayList<String> Rungsi = new ArrayList<String>();
+    private ArrayList<String> Rungsi = new ArrayList<String>();
     //private ArrayList<String> newRungsi = new ArrayList<String>();
     private int size = 0;
 
@@ -13,8 +13,8 @@ class Marble {
     }
 
     public Marble(int n) {
-        size = n;
-        ArrayList<String> Rungsi = new ArrayList<String>();
+        size = (2*n)+1;
+        Rungsi = new ArrayList<String>();
         for (int i = 0; i < n; i++) {
             Rungsi.add("w" + i);
         }
@@ -23,35 +23,51 @@ class Marble {
             Rungsi.add("b" + i);
         }
         this.showall(Rungsi);
-        
-        this.solvable(Rungsi);
+        System.out.println("1");
     }
     
-    private boolean solvable(ArrayList<String> Rungsi) {
-        if (puzzleSolved(Rungsi)) {
+    public void start(){
+        showall(Rungsi);
+        System.out.println("1.5");
+        if(this.solvable(Rungsi))
+            System.out.printf("Kawin\n");
+        else System.out.printf("Newyear\n");
+    }
+    
+    private boolean solvable(ArrayList<String> board) {
+        if (puzzleSolved(board)) {
             return true;
         }
-        this.showall(Rungsi);
         for (int position = 0; position < size; position++) {
-            if (canMove(Rungsi,position)) {
-                ArrayList<String> newRungsi = makeMove(Rungsi,position);
+            if (canMove(board, position)) {
+                showall(board);
+                System.out.println("1.75");
+                ArrayList<String> newBoard = makeMove(board, position);
+                showall(newBoard);
+                System.out.println("2");
 
-                if (solvable(newRungsi)) {
+                if (solvable(newBoard)) {
+                    showall(newBoard);
+                    System.out.println("3");
+                    //printBoard1(newBoard);
                     return true;
                 }
 
-                //System.out.println("NOT SOLVABLE: ");
-                //System.out.println("Position: " + position);
+                System.out.println("NOT SOLVABLE: ");
+                System.out.println("Position: " + position);
+                showall(newBoard);
+                System.out.println("5");
                 //printBoard1(board);
             }
         }
         return false;
     }
-    private void printBoard1(ArrayList<String> newRungsi) {
-        for (String i : newRungsi) {
-            if (i.charAt(0) == 'b') {
-                System.out.print(" ");
-            } else if(i.charAt(0) == 'w') {
+
+    /*private void printBoard1(ArrayList<String> newBoard) {
+        for (String i : newBoard) {
+            if (i == BLACK) {
+                System.out.print("WHITE ");
+            } else if(i == WHITE) {
                 System.out.print("BLACK ");
             } else {
                 System.out.print("___ ");
@@ -59,29 +75,31 @@ class Marble {
         }
 
         System.out.println();
-    }
+    }*/
 
-    private boolean canMove(ArrayList<String> Rungsi, int position) {
-        if (Rungsi.get(position).charAt(0) == '_') {
+    private boolean canMove(ArrayList<String> board, int position) {
+        
+        System.out.println(board.get(position));
+        if (board.get(position).charAt(0) == '_') {
             return false;
         }
 
-        if (Rungsi.get(position).charAt(0) == 'w') {
-            if ((position + 1) < size  &&  Rungsi.get(position + 1).charAt(0) == '_') {
+        if (board.get(position).charAt(0) == 'w') {
+            if ((position + 1) < size &&  board.get(position + 1).charAt(0) == '_') {
                 return true;
             }
 
-            if ((position + 2) < size  &&  Rungsi.get(position + 2).charAt(0) == '_'   &&  Rungsi.get(position + 1).charAt(0) == 'b') {
+            if ((position + 2) < size  &&  board.get(position + 2).charAt(0) == '_'  &&  board.get(position + 1).charAt(0) == 'b') {
                 return true;
             }
         }
 
-        if (Rungsi.get(position).charAt(0) == 'b') {
-            if ((position - 1) >= 0  &&  Rungsi.get(position - 1).charAt(0) == '_') {
+        if (board.get(position).charAt(0) == 'b') {
+            if ((position - 1) >= 0  &&  board.get(position - 1).charAt(0) == '_') {
                 return true;
             }
 
-            if ((position - 2) >= 0  &&  Rungsi.get(position - 2).charAt(0) == '_'  &&  Rungsi.get(position - 1).charAt(0) == 'w') {
+            if ((position - 2) >= 0  &&  board.get(position - 2).charAt(0) == '_'  &&  board.get(position).charAt(0) == 'w') {
                 return true;
             }
         }
@@ -89,71 +107,70 @@ class Marble {
         return false;
     }
 
-    private ArrayList<String> makeMove(ArrayList<String> Rungsi, int position) {
-        ArrayList<String> temp = new ArrayList<String>();
+    private ArrayList<String> makeMove(ArrayList<String> board, int position) {
+        ArrayList<String> newBoard = (ArrayList) board.clone();
 
-        System.arraycopy(Rungsi, 0, temp, 0, size);
-
-
-        if (temp.get(position).charAt(0) == '_') {
+        if (newBoard.get(position).charAt(0) == '_') {
             throw new IllegalStateException();
         }
 
-        if (temp.get(position).charAt(0) == 'w') {
-            if (temp.get(position + 1).charAt(0) == '_') {
-                String TEMP = temp.get(position);
-                temp.get(position).equals("_");
-                temp.get(position+1).equals(TEMP);
-                return temp;
-            }
+        if (newBoard.get(position).charAt(0) == 'w') {
+            if (newBoard.get(position + 1).charAt(0) == '_') {
+                String TEMP = String.valueOf(newBoard.get(position));
+                newBoard.get(position).equals(String.valueOf("_"));
+                newBoard.get(position + 1).equals(TEMP);
+                return newBoard;
+            }  
 
-            if (temp.get(position + 2).charAt(0) == '_'  &&  temp.get(position + 1).charAt(0) == 'b') {
-                String TEMP = temp.get(position+2);
-                temp.get(position).equals("_");
-                temp.get(position + 2).equals(TEMP);
-                return temp;
-            }
-        }
-
-        if (temp.get(position).charAt(0) == 'b') {
-            if (temp.get(position - 1) == "_") {
-                String TEMP = temp.get(position);
-                temp.get(position).equals("_");
-                temp.get(position - 1).equals(TEMP);
-                return temp;
-            }
-
-            if (temp.get(position - 2).charAt(0) == '_'  &&  temp.get(position - 1).charAt(0) == 'w') {
-                String TEMP =  temp.get(position);
-                temp.get(position).equals("_");
-                temp.get(position - 2).equals(TEMP);
-                return temp;
+            if (newBoard.get(position + 2).charAt(0) == '_'  &&  newBoard.get(position + 1).charAt(0) == 'b') {
+                String TEMP = newBoard.get(position);
+                newBoard.get(position).equals("_");
+                newBoard.get(position + 2).equals(TEMP);
+                return newBoard;
             }
         }
 
-        return temp;
+        if (newBoard.get(position).charAt(0) == 'b') {
+            if (newBoard.get(position - 1).charAt(0) == '_') {
+                String TEMP = newBoard.get(position);
+                newBoard.get(position).equals("_");
+                newBoard.get(position - 1).equals(TEMP);
+                return newBoard;
+            }
+
+            if (newBoard.get(position - 2).charAt(0) == '_'  &&  newBoard.get(position - 1).charAt(0) == 'w') {
+                String TEMP = newBoard.get(position);
+                newBoard.get(position).equals("_");
+                newBoard.get(position - 2).equals(TEMP);
+                return newBoard;
+            }
+        }
+        return newBoard;
     }
 
-    private boolean puzzleSolved(ArrayList<String> Rungsi) {
+    private boolean puzzleSolved(ArrayList<String> board) {
         int half = size / 2;
 
         for (int i = 0; i < half; i++) {
-            if (Rungsi.get(i).charAt(0) != 'b') {
+            if (board.get(i).charAt(0) != 'b') {
                 return false;
             }
         }
 
         for (int i = half + 1; i < size; i++) {
-            if (Rungsi.get(i).charAt(0) != 'w') {
+            if (board.get(i).charAt(0) != 'w') {
                 return false;
             }
         }
-        //this.showall(Rungsi);
+        
+        showall(board);
+        System.out.println("4");
+
         return true;
     }
     
-    public void showall(ArrayList<String> Rungsi) {
-        for (String a : Rungsi) {
+    public void showall(ArrayList<String> Board) {
+        for (String a : Board) {
             System.out.printf("%s ", a);
         }
         System.out.printf("\n");
