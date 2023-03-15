@@ -5,8 +5,8 @@ public class Puzzle {
     private static final int EMPTY = 0;
 
     public static void main(String[] args) {
-        //int[] board = new int[] {WHITE,WHITE , EMPTY, BLACK, BLACK};
-        int[] board = new int[] {BLACK,WHITE , EMPTY, BLACK,WHITE};
+        int[] board = new int[] {WHITE,WHITE , EMPTY, BLACK, BLACK};
+        //int[] board = new int[] {BLACK,WHITE , EMPTY, BLACK,WHITE};
 
         Puzzle marble = new Puzzle();
         //marble.printBoard1(board);

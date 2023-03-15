@@ -6,7 +6,7 @@ import java.io.*;
 class Marble {
 
     private ArrayList<String> Rungsi = new ArrayList<String>();
-    //private ArrayList<String> newRungsi = new ArrayList<String>();
+    private ArrayList<ArrayList> prt = new ArrayList<ArrayList>();
     private int size = 0;
 
     public Marble() {
@@ -23,15 +23,17 @@ class Marble {
             Rungsi.add("b" + i);
         }
         this.showall(Rungsi);
-        System.out.println("1");
     }
     
     public void start(){
         showall(Rungsi);
-        System.out.println("1.5");
         if(this.solvable(Rungsi))
-            System.out.printf("Kawin\n");
-        else System.out.printf("Newyear\n");
+            System.out.printf("SUCCESS\n");
+        else System.out.printf("UN_SUCCESS\n");
+        for(int i = prt.size() - 1; i >= 0; i--){
+            showall(prt.get(i));
+        }
+            
     }
     
     private boolean solvable(ArrayList<String> board) {
@@ -40,46 +42,26 @@ class Marble {
         }
         for (int position = 0; position < size; position++) {
             if (canMove(board, position)) {
-                showall(board);
-                System.out.println("1.75");
                 ArrayList<String> newBoard = makeMove(board, position);
-                showall(newBoard);
-                System.out.println("2");
-
+                //showall(newBoard);
+                
                 if (solvable(newBoard)) {
-                    showall(newBoard);
-                    System.out.println("3");
-                    //printBoard1(newBoard);
+                    prt.add(newBoard);
+                    //showall(newBoard);
                     return true;
                 }
 
-                System.out.println("NOT SOLVABLE: ");
+                /*System.out.println("NOT SOLVABLE: ");
                 System.out.println("Position: " + position);
-                showall(newBoard);
-                System.out.println("5");
-                //printBoard1(board);
+                showall(newBoard);*/
+                //showall(newBoard);
             }
         }
         return false;
     }
 
-    /*private void printBoard1(ArrayList<String> newBoard) {
-        for (String i : newBoard) {
-            if (i == BLACK) {
-                System.out.print("WHITE ");
-            } else if(i == WHITE) {
-                System.out.print("BLACK ");
-            } else {
-                System.out.print("___ ");
-            }
-        }
-
-        System.out.println();
-    }*/
-
     private boolean canMove(ArrayList<String> board, int position) {
         
-        System.out.println(board.get(position));
         if (board.get(position).charAt(0) == '_') {
             return false;
         }
@@ -99,7 +81,7 @@ class Marble {
                 return true;
             }
 
-            if ((position - 2) >= 0  &&  board.get(position - 2).charAt(0) == '_'  &&  board.get(position).charAt(0) == 'w') {
+            if ((position - 2) >= 0  &&  board.get(position - 2).charAt(0) == '_'  &&  board.get(position - 1).charAt(0) == 'w') {
                 return true;
             }
         }
@@ -117,31 +99,32 @@ class Marble {
         if (newBoard.get(position).charAt(0) == 'w') {
             if (newBoard.get(position + 1).charAt(0) == '_') {
                 String TEMP = String.valueOf(newBoard.get(position));
-                newBoard.get(position).equals(String.valueOf("_"));
-                newBoard.get(position + 1).equals(TEMP);
+                newBoard.set(position, String.valueOf("_"));
+                newBoard.set(position + 1, TEMP);
                 return newBoard;
             }  
 
             if (newBoard.get(position + 2).charAt(0) == '_'  &&  newBoard.get(position + 1).charAt(0) == 'b') {
                 String TEMP = newBoard.get(position);
-                newBoard.get(position).equals("_");
-                newBoard.get(position + 2).equals(TEMP);
+                newBoard.set(position, "_");
+                newBoard.set(position + 2, TEMP);
                 return newBoard;
             }
         }
 
-        if (newBoard.get(position).charAt(0) == 'b') {
+        if (newBoard.get(position).charAt(0) == 'b') 
+        {
             if (newBoard.get(position - 1).charAt(0) == '_') {
                 String TEMP = newBoard.get(position);
-                newBoard.get(position).equals("_");
-                newBoard.get(position - 1).equals(TEMP);
+                newBoard.set(position, "_");
+                newBoard.set(position - 1, TEMP);
                 return newBoard;
             }
 
             if (newBoard.get(position - 2).charAt(0) == '_'  &&  newBoard.get(position - 1).charAt(0) == 'w') {
                 String TEMP = newBoard.get(position);
-                newBoard.get(position).equals("_");
-                newBoard.get(position - 2).equals(TEMP);
+                newBoard.set(position, "_");
+                newBoard.set(position - 2, TEMP);
                 return newBoard;
             }
         }
@@ -164,15 +147,15 @@ class Marble {
         }
         
         showall(board);
-        System.out.println("4");
-
         return true;
     }
     
     public void showall(ArrayList<String> Board) {
         for (String a : Board) {
+            //System.out.printf("%s ", Board);
             System.out.printf("%s ", a);
         }
+        //System.out.printf("%s ", Board);
         System.out.printf("\n");
     }
 }
