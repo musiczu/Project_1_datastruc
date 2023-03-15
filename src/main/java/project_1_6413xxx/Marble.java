@@ -17,7 +17,6 @@ class Marble {
 
     public Marble(int n) {
         size = (2 * n) + 1;
-        initial = new ArrayList<String>();
         for (int i = 0; i < n; i++) {
             initial.add("w" + i);
         }
