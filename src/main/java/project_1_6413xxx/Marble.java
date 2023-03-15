@@ -1,4 +1,4 @@
-package project_1_6413xxx;
+package Ex4_6413110;
 
 import java.util.*;
 import java.io.*;
@@ -34,19 +34,23 @@ class Marble {
     }
 
     public boolean manualpilot(ArrayList<String> board) {
+
         if (puzzleSolved(board)) {
             return true;
         }
         System.out.print("Step  " + ++step + " >>  Enter marble ID or A to switch to auto mode =     ");
         Scanner In = new Scanner(System.in);
         String input = In.nextLine();
+        
+        while(true)
+        {
         int position = board.indexOf(input);
-        if (canMove(board, position) == false ) {
-            System.out.println("            Cannot move " + input);
+        if (canMove(board, position) == false && (input.equals("w0") || input.equals("w1") || input.equals("b0") || input.equals("b1"))) {
+            System.out.println(" Cannot move " + input);
             manualpilot(board);
         } else {
             ArrayList<String> newBoard = makeMove(board, position);
-            System.out.print("            ");
+            System.out.print(" ");
             showall(newBoard);
             if (manualpilot(newBoard)) {
                 prt.add(newBoard);
@@ -54,6 +58,7 @@ class Marble {
             }
         }
         return false;
+    }
     }
 
     public void autopilot() {
@@ -136,7 +141,8 @@ class Marble {
 
             if (newBoard.get(position + 2).charAt(0) == '_' && newBoard.get(position + 1).charAt(0) == 'b') {
                 System.out.println("            Jump right  " + newBoard.get(position));
-                String TEMP = newBoard.get(position);
+                //String TEMP = newBoard.get(position);
+                String TEMP = String.valueOf(newBoard.get(position));
                 newBoard.set(position, "_");
                 newBoard.set(position + 2, TEMP);
                 return newBoard;
@@ -146,7 +152,8 @@ class Marble {
         if (newBoard.get(position).charAt(0) == 'b') {
             if (newBoard.get(position - 1).charAt(0) == '_') {
                 System.out.println("            Move left   " + newBoard.get(position));
-                String TEMP = newBoard.get(position);
+               // String TEMP = newBoard.get(position);
+               String TEMP = String.valueOf(newBoard.get(position));
                 newBoard.set(position, "_");
                 newBoard.set(position - 1, TEMP);
                 return newBoard;
@@ -154,7 +161,8 @@ class Marble {
 
             if (newBoard.get(position - 2).charAt(0) == '_' && newBoard.get(position - 1).charAt(0) == 'w') {
                 System.out.println("            Jump left   " + newBoard.get(position));
-                String TEMP = newBoard.get(position);
+                //String TEMP = newBoard.get(position);
+                String TEMP = String.valueOf(newBoard.get(position));
                 newBoard.set(position, "_");
                 newBoard.set(position - 2, TEMP);
                 return newBoard;
@@ -184,18 +192,5 @@ class Marble {
         }
         System.out.printf("\n");
     }
-
-    /*
-     * public void Getinput()
-     * {
-     * Scanner In = new Scanner(System.in);
-     * if (In canMove(Board, size) == false)
-     * {
-     * System.out.println("Cannot move ");
-     * } else {
-     * System.out.println("Can move ");
-     * }
-     * }
-     */
 
 }
