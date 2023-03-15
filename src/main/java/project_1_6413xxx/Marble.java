@@ -34,7 +34,6 @@ class Marble {
     }
 
     public boolean manualpilot(ArrayList<String> board) {
-        int step = 1;
         if (puzzleSolved(board)) {
             return true;
         }
