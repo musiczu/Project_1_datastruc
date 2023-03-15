@@ -45,7 +45,7 @@ class Marble {
         temp = board;
         boolean checkedmode = false; // manual
         while (!checkedmode) {
-            System.out.print("Step  " + ++step + " >>  Enter marble ID or A to switch to auto mode =     ");
+            System.out.print("Step  " + step++ + " >>  Enter marble ID or A to switch to auto mode =     ");
             String input = In.nextLine();
             input = input.toLowerCase();
             switch (input) {
