@@ -5,9 +5,10 @@ import java.io.*;
 
 class Marble {
 
-    private ArrayList<String> Rungsi = new ArrayList<String>();
+    private ArrayList<String> initial = new ArrayList<String>();
     private ArrayList<ArrayList> prt = new ArrayList<ArrayList>();
-    private int mode = 0; //0 = manual 1 = auto
+    private int mode = 0; // 0 = manual 1 = auto
+    private int step = 0;
     private int size = 0;
 
     public Marble() {
@@ -15,21 +16,48 @@ class Marble {
 
     public Marble(int n) {
         size = (2 * n) + 1;
-        Rungsi = new ArrayList<String>();
+        initial = new ArrayList<String>();
         for (int i = 0; i < n; i++) {
-            Rungsi.add("w" + i);
+            initial.add("w" + i);
         }
-        Rungsi.add("_");
+        initial.add("_");
         for (int i = 0; i < n; i++) {
-            Rungsi.add("b" + i);
+            initial.add("b" + i);
         }
         System.out.printf("\nInitial   >>  ");
-        this.showall(Rungsi);
+        this.showall(initial);
         System.out.printf("\n");
     }
 
     public void start() {
-        if (this.solvable(Rungsi)) {
+        manualpilot(initial);
+    }
+
+    public boolean manualpilot(ArrayList<String> board) {
+        if (puzzleSolved(board)) {
+            return true;
+        }
+        System.out.print("Step  " + ++step + " >>  Enter marble ID or A to switch to auto mode =     ");
+        Scanner In = new Scanner(System.in);
+        String input = In.nextLine();
+        int position = board.indexOf(input);
+        if (canMove(board, position) == false ) {
+            System.out.println("            Cannot move " + input);
+            manualpilot(board);
+        } else {
+            ArrayList<String> newBoard = makeMove(board, position);
+            System.out.print("            ");
+            showall(newBoard);
+            if (manualpilot(newBoard)) {
+                prt.add(newBoard);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void autopilot() {
+        if (this.solvable(initial)) {
             for (int i = prt.size() - 1; i >= 0; i--) {
                 int j = prt.size() - i;
                 System.out.printf("Auto  %d  >>  ", j);
@@ -49,18 +77,11 @@ class Marble {
         for (int position = 0; position < size; position++) {
             if (canMove(board, position)) {
                 ArrayList<String> newBoard = makeMove(board, position);
-                //showall(newBoard);
 
                 if (solvable(newBoard)) {
                     prt.add(newBoard);
-                    //showall(newBoard);
                     return true;
                 }
-
-                /*System.out.println("NOT SOLVABLE: ");
-                System.out.println("Position: " + position);
-                showall(newBoard);*/
-                //showall(newBoard);
             }
         }
         return false;
@@ -77,7 +98,8 @@ class Marble {
                 return true;
             }
 
-            if ((position + 2) < size && board.get(position + 2).charAt(0) == '_' && board.get(position + 1).charAt(0) == 'b') {
+            if ((position + 2) < size && board.get(position + 2).charAt(0) == '_'
+                    && board.get(position + 1).charAt(0) == 'b') {
                 return true;
             }
         }
@@ -87,7 +109,8 @@ class Marble {
                 return true;
             }
 
-            if ((position - 2) >= 0 && board.get(position - 2).charAt(0) == '_' && board.get(position - 1).charAt(0) == 'w') {
+            if ((position - 2) >= 0 && board.get(position - 2).charAt(0) == '_'
+                    && board.get(position - 1).charAt(0) == 'w') {
                 return true;
             }
         }
@@ -104,6 +127,7 @@ class Marble {
 
         if (newBoard.get(position).charAt(0) == 'w') {
             if (newBoard.get(position + 1).charAt(0) == '_') {
+                System.out.println("            Move right  " + newBoard.get(position));
                 String TEMP = String.valueOf(newBoard.get(position));
                 newBoard.set(position, String.valueOf("_"));
                 newBoard.set(position + 1, TEMP);
@@ -111,6 +135,7 @@ class Marble {
             }
 
             if (newBoard.get(position + 2).charAt(0) == '_' && newBoard.get(position + 1).charAt(0) == 'b') {
+                System.out.println("            Jump right  " + newBoard.get(position));
                 String TEMP = newBoard.get(position);
                 newBoard.set(position, "_");
                 newBoard.set(position + 2, TEMP);
@@ -120,6 +145,7 @@ class Marble {
 
         if (newBoard.get(position).charAt(0) == 'b') {
             if (newBoard.get(position - 1).charAt(0) == '_') {
+                System.out.println("            Move left   " + newBoard.get(position));
                 String TEMP = newBoard.get(position);
                 newBoard.set(position, "_");
                 newBoard.set(position - 1, TEMP);
@@ -127,6 +153,7 @@ class Marble {
             }
 
             if (newBoard.get(position - 2).charAt(0) == '_' && newBoard.get(position - 1).charAt(0) == 'w') {
+                System.out.println("            Jump left   " + newBoard.get(position));
                 String TEMP = newBoard.get(position);
                 newBoard.set(position, "_");
                 newBoard.set(position - 2, TEMP);
@@ -157,4 +184,18 @@ class Marble {
         }
         System.out.printf("\n");
     }
+
+    /*
+     * public void Getinput()
+     * {
+     * Scanner In = new Scanner(System.in);
+     * if (In canMove(Board, size) == false)
+     * {
+     * System.out.println("Cannot move ");
+     * } else {
+     * System.out.println("Can move ");
+     * }
+     * }
+     */
+
 }

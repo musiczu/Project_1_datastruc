@@ -12,5 +12,6 @@ public class Project_1_6413xxx {
             int n = scan.nextInt();
             Marble m = new Marble(n);
             m.start();
+            
         }
     }
