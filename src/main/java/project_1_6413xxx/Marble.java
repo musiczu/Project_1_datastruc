@@ -91,7 +91,7 @@ class Marble {
         } else {
             System.out.printf("No solution !!!\n\n");
         }
-        System.out.printf("================================");
+        System.out.printf("================================================================");
     }
 
     private boolean solvable(ArrayList<String> board) {
