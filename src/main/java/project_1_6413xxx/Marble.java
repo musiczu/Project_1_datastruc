@@ -1,14 +1,23 @@
+/*6413110 Mr.Watcharsak Prommanee
+6413112 Mr.Sasit Srirat
+6413210 Mr.Kawin Kengkate
+6413223 Mr.Ravipol Chayeraksa
+UPDATE 17/03/23 15.44 */
+
 package project_1_6413xxx;
 
 import java.util.*;
 import java.io.*;
 
 class Marble {
-
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
     private ArrayList<String> initial = new ArrayList<String>();
     private ArrayList<ArrayList> prt = new ArrayList<ArrayList>();
     private ArrayList<String> temp;
-    private int mode = 0; // 0 = manual 1 = auto
+    private int mode = 0; // 0 = manual, 1 = auto
     private int step = 0;
     private int size = 0;
 
@@ -54,25 +63,25 @@ class Marble {
                     break;
                 default:
                     try {
-                    int position = board.indexOf(input);
-                    if (canMove(board, position) == false) {
-                        System.out.println(" ==>> Cannot move  " + input + " <<==");
-                        manualpilot(board);
-                    } else {
-                        ArrayList<String> newBoard = makeMove(board, position);
-                        System.out.print("            ");
-                        showall(newBoard);
-                        if (manualpilot(newBoard)) {
-                            prt.add(newBoard);
-                            return true;
+                        int position = board.indexOf(input);
+                        if (canMove(board, position) == false) {
+                            System.out.println("==>> Cannot move -> "  + ANSI_RED + input + ANSI_RESET + " <<==");
+                            manualpilot(board);
+                        } else {
+                            ArrayList<String> newBoard = makeMove(board, position);
+                            System.out.print("            ");
+                            showall(newBoard);
+                            if (manualpilot(newBoard)) {
+                                prt.add(newBoard);
+                                return true;
+                            }
                         }
+                        return false;
+                    } catch (Exception e) {
+                        System.out.println("==>> We do not have -> " + ANSI_YELLOW + input + ANSI_RESET + " <<==" );
+                        step--;
                     }
-                    return false;
-                } catch (Exception e) {
-                    System.out.printf(" ==>> we do not have %s <<==\n", input);
-                    step--;
-                }
-                break;
+                    break;
             }
         }
         return false;
@@ -120,7 +129,6 @@ class Marble {
             if ((position + 1) < size && board.get(position + 1).charAt(0) == '_') {
                 return true;
             }
-
             if ((position + 2) < size && board.get(position + 2).charAt(0) == '_'
                     && board.get(position + 1).charAt(0) == 'b') {
                 return true;
@@ -151,7 +159,7 @@ class Marble {
         if (newBoard.get(position).charAt(0) == 'w') {
             if (newBoard.get(position + 1).charAt(0) == '_') {
                 if (mode == 0) {
-                    System.out.println(" ==>> Move right  " + newBoard.get(position) + " <<==");
+                    System.out.println("==>> Move right  " + ANSI_GREEN + newBoard.get(position) + ANSI_RESET + " <<==");
                 }
                 String TEMP = String.valueOf(newBoard.get(position));
                 newBoard.set(position, String.valueOf("_"));
@@ -161,7 +169,8 @@ class Marble {
 
             if (newBoard.get(position + 2).charAt(0) == '_' && newBoard.get(position + 1).charAt(0) == 'b') {
                 if (mode == 0) {
-                    System.out.println(" ==>> Jump right  " + newBoard.get(position) + " <<==");
+                    System.out.println("==>> Jump right  " + ANSI_GREEN + newBoard.get(position) + ANSI_RESET + " <<==");
+                   // System.out.println(" ==>> Jump right  " + newBoard.get(position) + " <<==");
                 }
                 String TEMP = newBoard.get(position);
                 newBoard.set(position, "_");
@@ -173,7 +182,8 @@ class Marble {
         if (newBoard.get(position).charAt(0) == 'b') {
             if (newBoard.get(position - 1).charAt(0) == '_') {
                 if (mode == 0) {
-                    System.out.println(" ==>> Move left   " + newBoard.get(position) + " <<==");
+                    System.out.println("==>> Move left   " + ANSI_GREEN + newBoard.get(position) + ANSI_RESET + " <<==");
+                    //System.out.println(" ==>> Move left   " + newBoard.get(position) + " <<==");
                 }
                 String TEMP = newBoard.get(position);
                 newBoard.set(position, "_");
@@ -183,7 +193,8 @@ class Marble {
 
             if (newBoard.get(position - 2).charAt(0) == '_' && newBoard.get(position - 1).charAt(0) == 'w') {
                 if (mode == 0) {
-                    System.out.println(" ==>> Jump left   " + newBoard.get(position) + " <<==");
+                    System.out.println("==>> Jump left   " + ANSI_GREEN + newBoard.get(position) + ANSI_RESET + " <<==");
+                    //System.out.println(" ==>> Jump left   " + newBoard.get(position) + " <<==");
                 }
                 String TEMP = newBoard.get(position);
                 newBoard.set(position, "_");
