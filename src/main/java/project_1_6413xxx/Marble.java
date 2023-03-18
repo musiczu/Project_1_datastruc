@@ -44,6 +44,7 @@ class Marble {
 
     public boolean manualpilot(ArrayList<String> board) {
         if (puzzleSolved(board)) {
+            System.out.printf("\nSUCCESS\n");
             return true;
         }
         Scanner In = new Scanner(System.in);
